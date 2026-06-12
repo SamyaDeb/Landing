@@ -30,10 +30,10 @@ export function Meadow() {
 
   return (
     <div
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-[32%] overflow-hidden"
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-[22%] overflow-hidden"
       aria-hidden="true"
     >
-      {/* Back layer of grass — slightly larger, slower sway, extra blur for depth */}
+      {/* Back layer of grass — slightly larger, slower sway, faint softness for depth */}
       <div
         className="animate-grass-sway absolute inset-x-[-4%] bottom-0 h-full bg-cover bg-bottom"
         style={{
@@ -42,10 +42,10 @@ export function Meadow() {
           "--sway-min": "-1.2deg",
           "--sway-max": "1.2deg",
           "--dur": "9s",
-          filter: "blur(3px)",
-          opacity: 0.8,
-          maskImage: "linear-gradient(to top, black 45%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to top, black 45%, transparent 100%)",
+          filter: "blur(1px)",
+          opacity: 0.95,
+          maskImage: "linear-gradient(to top, black 60%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to top, black 60%, transparent 100%)",
         }}
       />
 
@@ -59,8 +59,8 @@ export function Meadow() {
           "--sway-max": "2deg",
           "--dur": "7s",
           transformOrigin: "bottom center",
-          maskImage: "linear-gradient(to top, black 30%, transparent 85%)",
-          WebkitMaskImage: "linear-gradient(to top, black 30%, transparent 85%)",
+          maskImage: "linear-gradient(to top, black 50%, transparent 92%)",
+          WebkitMaskImage: "linear-gradient(to top, black 50%, transparent 92%)",
         }}
       />
 
