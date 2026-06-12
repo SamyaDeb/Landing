@@ -21,9 +21,14 @@ export function Meadow() {
     return Array.from({ length: 46 }).map(() => {
       const min = -(rand() * 4 + 2)
       const max = rand() * 4 + 2
+      const height = rand() * 70 + 40
+      // taller blades read as closer to the camera, so blur them more
+      const blur = (height / 110) * 4 + rand() * 1.5 + 1
       return {
         left: `${rand() * 100}%`,
-        height: rand() * 70 + 40,
+        height,
+        width: rand() * 4 + 3,
+        blur,
         dur: `${rand() * 2.5 + 3}s`,
         delay: `${rand() * 4}s`,
         min: `${min}deg`,
@@ -39,10 +44,14 @@ export function Meadow() {
       const min = -(rand() * 6 + 3)
       const max = rand() * 6 + 3
       const palette = ["oklch(0.85 0.13 85)", "oklch(0.82 0.15 60)", "oklch(0.88 0.1 95)"]
+      const bottom = rand() * 40
+      // lower flowers are closer/larger and more out of focus
+      const blur = (1 - bottom / 40) * 5 + rand() * 1.5 + 1.5
       return {
         left: `${rand() * 100}%`,
-        bottom: `${rand() * 40}px`,
-        size: rand() * 10 + 8,
+        bottom: `${bottom}px`,
+        size: rand() * 12 + 9,
+        blur,
         dur: `${rand() * 2 + 3.5}s`,
         delay: `${rand() * 4}s`,
         min: `${min}deg`,
@@ -68,6 +77,17 @@ export function Meadow() {
       className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] overflow-hidden"
       aria-hidden="true"
     >
+      {/* Soft out-of-focus bokeh haze pooling at the bottom edges for a
+          shallow depth-of-field feel, matching the blurry foreground grass. */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-2/3"
+        style={{
+          background:
+            "radial-gradient(120% 90% at 8% 100%, oklch(0.7 0.13 95 / 0.28), transparent 55%), radial-gradient(120% 90% at 92% 100%, oklch(0.72 0.14 70 / 0.28), transparent 55%)",
+          filter: "blur(28px)",
+        }}
+      />
+
       {/* fireflies */}
       {fireflies.map((f, i) => (
         <span
@@ -87,13 +107,14 @@ export function Meadow() {
         />
       ))}
 
-      {/* grass blades */}
+      {/* grass blades — blurred for a shallow depth-of-field foreground */}
       {blades.map((b, i) => (
         <div
           key={`blade-${i}`}
           className="animate-sway absolute bottom-0"
           style={{
             left: b.left,
+            filter: `blur(${b.blur}px)`,
             // @ts-expect-error custom props
             "--dur": b.dur,
             "--sway-min": b.min,
@@ -103,7 +124,7 @@ export function Meadow() {
         >
           <div
             style={{
-              width: 3,
+              width: b.width,
               height: b.height,
               borderRadius: "999px 999px 2px 2px",
               background: `linear-gradient(to top, transparent, ${b.hue})`,
@@ -112,7 +133,7 @@ export function Meadow() {
         </div>
       ))}
 
-      {/* glowing flowers */}
+      {/* glowing flowers — soft bokeh orbs */}
       {flowers.map((fl, i) => (
         <div
           key={`flower-${i}`}
@@ -120,6 +141,7 @@ export function Meadow() {
           style={{
             left: fl.left,
             bottom: fl.bottom,
+            filter: `blur(${fl.blur}px)`,
             // @ts-expect-error custom props
             "--dur": fl.dur,
             "--sway-min": fl.min,
@@ -133,7 +155,7 @@ export function Meadow() {
               width: fl.size,
               height: fl.size,
               background: fl.color,
-              boxShadow: `0 0 10px 2px ${fl.color}`,
+              boxShadow: `0 0 ${fl.size}px ${fl.size / 2}px ${fl.color}`,
             }}
           />
         </div>
