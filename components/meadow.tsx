@@ -11,61 +11,17 @@ function seededRandom(seed: number) {
 }
 
 /**
- * Foreground layer that adds a sense of light wind: thin swaying grass blades,
- * little glowing flowers, and drifting fireflies layered over the bottom of the
- * hero photo so the meadow feels alive.
+ * Foreground meadow layer. Uses a real, heavily out-of-focus photo of grass and
+ * glowing wildflowers so it looks photographic rather than like CSS bars. Two
+ * overlapping copies sway in opposite directions to fake a light wind, and
+ * drifting fireflies are layered on top to keep the scene alive.
  */
 export function Meadow() {
-  const blades = useMemo(() => {
-    const rand = seededRandom(99)
-    return Array.from({ length: 46 }).map(() => {
-      const min = -(rand() * 4 + 2)
-      const max = rand() * 4 + 2
-      const height = rand() * 70 + 40
-      // taller blades read as closer to the camera, so blur them more
-      const blur = (height / 110) * 4 + rand() * 1.5 + 1
-      return {
-        left: `${rand() * 100}%`,
-        height,
-        width: rand() * 4 + 3,
-        blur,
-        dur: `${rand() * 2.5 + 3}s`,
-        delay: `${rand() * 4}s`,
-        min: `${min}deg`,
-        max: `${max}deg`,
-        hue: rand() > 0.5 ? "oklch(0.55 0.12 140)" : "oklch(0.6 0.13 130)",
-      }
-    })
-  }, [])
-
-  const flowers = useMemo(() => {
-    const rand = seededRandom(123)
-    return Array.from({ length: 16 }).map(() => {
-      const min = -(rand() * 6 + 3)
-      const max = rand() * 6 + 3
-      const palette = ["oklch(0.85 0.13 85)", "oklch(0.82 0.15 60)", "oklch(0.88 0.1 95)"]
-      const bottom = rand() * 40
-      // lower flowers are closer/larger and more out of focus
-      const blur = (1 - bottom / 40) * 5 + rand() * 1.5 + 1.5
-      return {
-        left: `${rand() * 100}%`,
-        bottom: `${bottom}px`,
-        size: rand() * 12 + 9,
-        blur,
-        dur: `${rand() * 2 + 3.5}s`,
-        delay: `${rand() * 4}s`,
-        min: `${min}deg`,
-        max: `${max}deg`,
-        color: palette[Math.floor(rand() * palette.length)],
-      }
-    })
-  }, [])
-
   const fireflies = useMemo(() => {
     const rand = seededRandom(321)
     return Array.from({ length: 22 }).map(() => ({
       left: `${rand() * 100}%`,
-      bottom: `${rand() * 180 + 10}px`,
+      bottom: `${rand() * 200 + 10}px`,
       dur: `${rand() * 4 + 4}s`,
       delay: `${rand() * 6}s`,
       size: rand() * 3 + 2,
@@ -74,21 +30,41 @@ export function Meadow() {
 
   return (
     <div
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] overflow-hidden"
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-[32%] overflow-hidden"
       aria-hidden="true"
     >
-      {/* Soft out-of-focus bokeh haze pooling at the bottom edges for a
-          shallow depth-of-field feel, matching the blurry foreground grass. */}
+      {/* Back layer of grass — slightly larger, slower sway, extra blur for depth */}
       <div
-        className="absolute inset-x-0 bottom-0 h-2/3"
+        className="animate-grass-sway absolute inset-x-[-4%] bottom-0 h-full bg-cover bg-bottom"
         style={{
-          background:
-            "radial-gradient(120% 90% at 8% 100%, oklch(0.7 0.13 95 / 0.28), transparent 55%), radial-gradient(120% 90% at 92% 100%, oklch(0.72 0.14 70 / 0.28), transparent 55%)",
-          filter: "blur(28px)",
+          backgroundImage: "url(/images/foreground-grass.png)",
+          // @ts-expect-error custom props
+          "--sway-min": "-1.2deg",
+          "--sway-max": "1.2deg",
+          "--dur": "9s",
+          filter: "blur(3px)",
+          opacity: 0.8,
+          maskImage: "linear-gradient(to top, black 45%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to top, black 45%, transparent 100%)",
         }}
       />
 
-      {/* fireflies */}
+      {/* Front layer of grass — closer, sways the other way for parallax life */}
+      <div
+        className="animate-grass-sway-alt absolute inset-x-[-6%] bottom-0 h-full scale-105 bg-cover bg-bottom"
+        style={{
+          backgroundImage: "url(/images/foreground-grass.png)",
+          // @ts-expect-error custom props
+          "--sway-min": "-2deg",
+          "--sway-max": "2deg",
+          "--dur": "7s",
+          transformOrigin: "bottom center",
+          maskImage: "linear-gradient(to top, black 30%, transparent 85%)",
+          WebkitMaskImage: "linear-gradient(to top, black 30%, transparent 85%)",
+        }}
+      />
+
+      {/* fireflies floating over the grass */}
       {fireflies.map((f, i) => (
         <span
           key={`fly-${i}`}
@@ -105,60 +81,6 @@ export function Meadow() {
             animationDelay: f.delay,
           }}
         />
-      ))}
-
-      {/* grass blades — blurred for a shallow depth-of-field foreground */}
-      {blades.map((b, i) => (
-        <div
-          key={`blade-${i}`}
-          className="animate-sway absolute bottom-0"
-          style={{
-            left: b.left,
-            filter: `blur(${b.blur}px)`,
-            // @ts-expect-error custom props
-            "--dur": b.dur,
-            "--sway-min": b.min,
-            "--sway-max": b.max,
-            animationDelay: b.delay,
-          }}
-        >
-          <div
-            style={{
-              width: b.width,
-              height: b.height,
-              borderRadius: "999px 999px 2px 2px",
-              background: `linear-gradient(to top, transparent, ${b.hue})`,
-            }}
-          />
-        </div>
-      ))}
-
-      {/* glowing flowers — soft bokeh orbs */}
-      {flowers.map((fl, i) => (
-        <div
-          key={`flower-${i}`}
-          className="animate-sway absolute"
-          style={{
-            left: fl.left,
-            bottom: fl.bottom,
-            filter: `blur(${fl.blur}px)`,
-            // @ts-expect-error custom props
-            "--dur": fl.dur,
-            "--sway-min": fl.min,
-            "--sway-max": fl.max,
-            animationDelay: fl.delay,
-          }}
-        >
-          <div
-            className="rounded-full"
-            style={{
-              width: fl.size,
-              height: fl.size,
-              background: fl.color,
-              boxShadow: `0 0 ${fl.size}px ${fl.size / 2}px ${fl.color}`,
-            }}
-          />
-        </div>
       ))}
     </div>
   )

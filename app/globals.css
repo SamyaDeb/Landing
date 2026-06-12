@@ -247,6 +247,17 @@
   }
 }
 
+/* Light-wind sway for the full grass image — gentle skew + rotate from base */
+@keyframes grass-sway {
+  0%,
+  100% {
+    transform: rotate(var(--sway-min, -1.2deg)) skewX(var(--sway-min, -1.2deg));
+  }
+  50% {
+    transform: rotate(var(--sway-max, 1.2deg)) skewX(var(--sway-max, 1.2deg));
+  }
+}
+
 /* Hero content fade up */
 @keyframes fade-up {
   from {
@@ -269,6 +280,16 @@
   animation: sway var(--dur, 4s) ease-in-out infinite;
   transform-origin: bottom center;
 }
+.animate-grass-sway {
+  animation: grass-sway var(--dur, 9s) ease-in-out infinite;
+  transform-origin: bottom center;
+  will-change: transform;
+}
+.animate-grass-sway-alt {
+  animation: grass-sway var(--dur, 7s) ease-in-out infinite reverse;
+  transform-origin: bottom center;
+  will-change: transform;
+}
 .animate-monitor-glow {
   animation: monitor-glow 3.2s ease-in-out infinite;
 }
@@ -286,6 +307,8 @@
   .animate-twinkle,
   .animate-cloud,
   .animate-sway,
+  .animate-grass-sway,
+  .animate-grass-sway-alt,
   .animate-monitor-glow,
   .animate-float-slow,
   .animate-star-fall,
