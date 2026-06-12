@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button"
 import { Starfield } from "@/components/starfield"
 import { Clouds } from "@/components/clouds"
+import { Navbar } from "@/components/navbar"
 
 export function Hero() {
   return (
-    <section id="home" className="relative min-h-[100svh] w-full overflow-hidden">
+    <section id="home" className="relative h-[100svh] w-full overflow-hidden">
       {/* Background photo of the starlit meadow scene */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -21,6 +22,9 @@ export function Hero() {
         aria-hidden="true"
       />
 
+      {/* Navbar */}
+      <Navbar />
+
       {/* Animated layers */}
       <Clouds />
       <Starfield />
@@ -33,7 +37,7 @@ export function Hero() {
       </div>
 
       {/* Hero copy */}
-      <div className="relative z-20 mx-auto flex min-h-[100svh] max-w-5xl flex-col items-center px-6 pt-40 text-center">
+      <div className="relative z-20 mx-auto flex h-[100svh] max-w-5xl flex-col items-center justify-center px-6 text-center">
         <h1 className="animate-fade-up text-balance font-serif text-4xl font-medium leading-[1.05] text-foreground sm:text-5xl lg:text-7xl">
           Where <span className="font-semibold">ideas bloom</span> under starlight.
         </h1>
