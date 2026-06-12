@@ -42,8 +42,7 @@ export function Meadow() {
           "--sway-min": "-1.2deg",
           "--sway-max": "1.2deg",
           "--dur": "9s",
-          filter: "blur(1px)",
-          opacity: 0.95,
+          opacity: 0.98,
           maskImage: "linear-gradient(to top, black 60%, transparent 100%)",
           WebkitMaskImage: "linear-gradient(to top, black 60%, transparent 100%)",
         }}
