@@ -37,23 +37,23 @@ export function Hero() {
       </div>
 
       {/* Hero copy */}
-      <div className="relative z-20 mx-auto flex h-[100svh] max-w-5xl flex-col items-center justify-center px-6 text-center">
-        <h1 className="animate-fade-up text-balance font-serif text-4xl font-medium leading-[1.05] text-foreground sm:text-5xl lg:text-7xl">
+      <div className="relative z-20 mx-auto flex h-full max-w-5xl flex-col items-center justify-center px-6 text-center">
+        <h1 className="animate-fade-up text-balance font-serif text-3xl font-medium leading-tight text-foreground sm:text-4xl md:text-5xl">
           Where <span className="font-semibold">ideas bloom</span> under starlight.
         </h1>
 
         <p
-          className="animate-fade-up mt-6 max-w-xl text-pretty text-sm leading-relaxed text-foreground/75 sm:text-base"
+          className="animate-fade-up mt-4 max-w-xl text-pretty text-xs leading-relaxed text-foreground/75 sm:text-sm"
           style={{ animationDelay: "0.15s" }}
         >
           We&apos;re building tools for thinkers, dreamers, and makers. In a world of noise, we
           design digital space for deep focus and meaningful creation.
         </p>
 
-        <div className="animate-fade-up mt-10" style={{ animationDelay: "0.3s" }}>
+        <div className="animate-fade-up mt-6" style={{ animationDelay: "0.3s" }}>
           <Button
-            size="lg"
-            className="rounded-full bg-white/10 px-8 py-6 text-base font-medium text-foreground backdrop-blur-md ring-1 ring-white/25 transition-all hover:bg-white/20"
+            size="sm"
+            className="rounded-full bg-white/10 px-6 py-2 text-xs font-medium text-foreground backdrop-blur-md ring-1 ring-white/25 transition-all hover:bg-white/20 sm:text-sm sm:px-7 sm:py-3"
           >
             Start Creating
           </Button>
