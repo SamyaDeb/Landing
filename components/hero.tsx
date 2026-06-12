@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Starfield } from "@/components/starfield"
 import { Clouds } from "@/components/clouds"
-import { Meadow } from "@/components/meadow"
 
 export function Hero() {
   return (
@@ -56,9 +55,6 @@ export function Hero() {
           </Button>
         </div>
       </div>
-
-      {/* Foreground living meadow (wind, grass, flowers, fireflies) */}
-      <Meadow />
     </section>
   )
 }
